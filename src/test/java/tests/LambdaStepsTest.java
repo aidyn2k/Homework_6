@@ -1,4 +1,8 @@
+package tests;
+
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selectors.withText;
@@ -13,28 +17,33 @@ public class LambdaStepsTest {
     private static final String REPOSITORY = "eroshenkoam/allure-example";
     private static final Integer ISSUE_NUMBER = 68;
 
+    @BeforeAll
+    static void browserSettings() {
+        Configuration.browserSize = "1920x1080";
+    }
+
     @Test
     public void testGithub() {
 
-        step("Открываем главную страницу", () -> {
+        step("Opens Main page", () -> {
             open("https://github.com");
         });
 
-        step("Ищем репозиторий " + REPOSITORY, () -> {
+        step("Searching for repository " + REPOSITORY, () -> {
             $(".header-search-input").click();
             $(".header-search-input").sendKeys(REPOSITORY);
             $(".header-search-input").submit();
         });
 
-        step("Переходим в репозиторий " + REPOSITORY, () -> {
+        step("Go to repository " + REPOSITORY, () -> {
             $(linkText("eroshenkoam/allure-example")).click();
         });
 
-        step("Открываем таб Issues", () -> {
+        step("Opens Issues tab", () -> {
             $(partialLinkText("Issues")).click();
         });
 
-        step("Проверяем что существует Issue с номером " + ISSUE_NUMBER, () -> {
+        step("Checking that Issue number existing" + ISSUE_NUMBER, () -> {
             $(withText("#" + ISSUE_NUMBER)).should(Condition.visible);
         });
     }
